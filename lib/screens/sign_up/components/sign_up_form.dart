@@ -3,22 +3,20 @@ import 'package:shop_app/components/custom_surffix_icon.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
-import 'package:shop_app/screens/login_success/login_success_screen.dart';
+import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shop_app/size_config.dart';
 
-class SignForm extends StatefulWidget {
-  const SignForm({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  _SignFormState createState() => _SignFormState();
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _SignFormState extends State<SignForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
-  bool remember = false;
   final List<String> errors = [];
 
   void addError({required String error}) {
@@ -41,55 +39,35 @@ class _SignFormState extends State<SignForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          buildEmailFormField(),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          buildPasswordFormField(),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          Row(
-            children: [
-              Checkbox(
-                  value: remember,
-                  activeColor: kPrimaryColor,
-                  onChanged: (value) {
-                    setState(() {
-                      remember = value!;
-                    });
-                  }),
-              Text("メールアドレスを保存"),
-              Spacer(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                    context, ForgotPasswordScreen.routeName),
-                child: Text(
-                  "パスワードを忘れました",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              ),
-            ],
-          ),
-          FormError(errors: errors),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          DefaultButton(
-              text: "サインイン",
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-
-                  // TODO: 認証処理
-
-                  // TODO: どうして次の画面は戻るボタンがないのか？
-                  Navigator.pushNamed(context, LoginSuccessScreen.routeName);
-                }
-              }),
-        ],
+      child: Padding(
+        padding:
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: Column(
+          children: [
+            buildEmailFormField(),
+            SizedBox(
+              height: getProportionateScreenHeight(30),
+            ),
+            buildPasswordFormField(),
+            SizedBox(
+              height: getProportionateScreenHeight(30),
+            ),
+            buildConfirmPasswordFormField(),
+            FormError(errors: errors),
+            SizedBox(
+              height: getProportionateScreenHeight(30),
+            ),
+            DefaultButton(
+                text: "登録",
+                press: () {
+                  if (_formKey.currentState!.validate()) {
+                    // プロフィールページへ
+                    Navigator.pushNamed(
+                        context, CompleteProfileScreen.routeName);
+                  }
+                })
+          ],
+        ),
       ),
     );
   }
@@ -137,6 +115,7 @@ class _SignFormState extends State<SignForm> {
         if (value.length >= 8) {
           removeError(error: kShortPassError);
         }
+        password = value;
         return null;
       },
       validator: (value) {
@@ -152,6 +131,37 @@ class _SignFormState extends State<SignForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelText: "パスワード",
         hintText: "パスワードを入力してください。",
+        hintStyle: TextStyle(color: kTextColor),
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildConfirmPasswordFormField() {
+    return TextFormField(
+      obscureText: true,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kPassNullError);
+        }
+        if (value.length >= 8) {
+          removeError(error: kShortPassError);
+        }
+        if (password == value) {
+          removeError(error: kMatchPassError);
+        }
+        return null;
+      },
+      validator: (value) {
+        if (password != value) {
+          addError(error: kMatchPassError);
+        }
+        return errors.length > 0 ? "" : null;
+      },
+      decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelText: "パスワード（確認）",
+        hintText: "パスワードを再入力してください。",
         hintStyle: TextStyle(color: kTextColor),
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
       ),

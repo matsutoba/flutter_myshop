@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/size_config.dart';
 
 const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryLightColor = Color(0xFFFFECDF);
@@ -12,6 +13,13 @@ const kTextColor = Color(0xFF757575);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 
+final headingStyle = TextStyle(
+  fontSize: getProportionateScreenWidth(28),
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  height: 1.5,
+);
+
 // Form Error
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -20,6 +28,22 @@ const String kInvalidEmailError = "メールアドレスの形式が不正です
 const String kPassNullError = "パスワードを入力してください。";
 const String kShortPassError = "パスワードが短すぎます。";
 const String kMatchPassError = "パスワードが一致しません。";
-const String kNamelNullError = "お名前を入力してください。";
+const String kNameNullError = "お名前を入力してください。";
 const String kPhoneNumberNullError = "電話番号を入力してください。";
 const String kAddressNullError = "住所を入力してください。";
+
+final otpInputDecoration = InputDecoration(
+  contentPadding: EdgeInsets.symmetric(
+    vertical: getProportionateScreenHeight(15),
+  ),
+  enabledBorder: outlineInputBorder(),
+  focusedBorder: outlineInputBorder(),
+  border: outlineInputBorder(),
+);
+
+OutlineInputBorder outlineInputBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15),
+    borderSide: BorderSide(color: kTextColor),
+  );
+}
