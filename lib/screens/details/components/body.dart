@@ -5,7 +5,6 @@ import 'package:shop_app/screens/details/components/color_dots.dart';
 import 'package:shop_app/screens/details/components/product_description.dart';
 import 'package:shop_app/screens/details/components/product_images.dart';
 import 'package:shop_app/screens/details/components/top_rounded_container.dart';
-import 'package:shop_app/size_config.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key, required this.product}) : super(key: key);
