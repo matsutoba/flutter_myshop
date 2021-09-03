@@ -36,7 +36,7 @@ class CartItemCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              demoCarts[0].product.title,
+              cart.product.title,
               style: TextStyle(fontSize: 16, color: Colors.black),
               maxLines: 2,
             ),
